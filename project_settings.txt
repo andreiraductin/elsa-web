@@ -1,0 +1,18 @@
+/usr/lib/postgresql/8.4/bin/pg_ctl start -D /usr/local/pgsql/data/
+/usr/lib/postgresql/8.4/bin/pg_ctl stop -D /usr/local/pgsql/data/
+
+cd f:/IESC/ELSA/work\ backups/work\ final
+
+git clone https://github.com/andreiraductin/elsa-web
+-copy from server to work_final folder
+-make a push on github
+
+Sincronizare branch cu master:
+git checkout master
+git pull
+git checkout mobiledevicesupport
+git merge master
+-------
+git checkout - b "branch"
+git init / git add ./ git commit -m "message"
+git push -u origin "branch" -> PR and merge in github web
