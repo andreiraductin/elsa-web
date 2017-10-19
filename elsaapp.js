@@ -9,13 +9,24 @@ var bodyParser = require('body-parser');
 var engine = require('ejs-locals');
 
 app.engine('ejs', engine);
-
+app.set('views',__dirname + '/views');
 app.set('view engine', 'ejs');
+
 
 app.use(bodyParser());
 
 app.use(express.static(__dirname + '/public'));
 
+// index page 
+app.get('/index', function(req, res) {
+    res.render('pages/index.ejs');
+});
+
+app.get('/', function (req, res) {
+	//res.redirect('admin.html');
+	res.render('pages/index.ejs');
+ });
+ 
 app.post('/api/v1/reports', (req, res) => {
   const results = [];
   // Grab data from http request
@@ -61,10 +72,6 @@ app.get('/api/v1/reports', (req, res) => {
       return res.json(results);
     });
   });
-});
-
-app.get('/', function (req, res) {
-  res.redirect('index.html');
 });
 
 app.listen(3000, function () {
