@@ -1,26 +1,19 @@
-<!-- views/pages/index.ejs -->
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <% include ../partials/head %>
 </head>
-<body class="container">
-
-<header>
-    <% include ../partials/header %>
-</header>
-
-<main>
-    <div class="jumbotron">
-        <h1>This is great</h1>
-        <p>Welcome to templating using EJS</p>
+<body class="nav-md">
+<div class="container body" ng-app="testModule">
+    <div class="main_container">
+        <% include ../partials/left_menu %>
+        <% include ../partials/top_menu %>
+        <div class="right_col" role="main">
+            <% include ../partials/elsa_content %>
+        </div>
+        <% include ../partials/footer%>
     </div>
-</main>
-
-<footer>
-    <% include ../partials/footer %>
-</footer>
-
+</div>
+    <% include ../partials/footer_scripts%>
 </body>
 </html>
