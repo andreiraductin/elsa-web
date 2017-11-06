@@ -105,3 +105,40 @@ function initDevicesMap($scope) {
 			}
 	   }); */
 }
+
+app.controller('loginController', function($scope, $http) {
+    $scope.loginData = [];
+    $http.get('http://etc.unitbv.ro/elsa/api/v1/users')
+        .success(function(loginData) {
+            $scope.loginData = loginData;
+            console.log($scope.loginData);
+            Login($scope.loginData);
+        })
+        .error(function(data){
+            console.log('Errors: ' + loginData);
+        });
+});
+
+function Login($loginData) {
+    $("#elsa-login-form").on("submit", function () {
+
+        var $form = $("#elsa-login-form");
+        var username = $form.find("#username").val();
+        var password = $form.find("#password").val();
+
+        if($loginData.length !== undefined && $loginData.length > 0){
+			for(var i = 0; i < $loginData.length; i++){
+					if($loginData[i] === undefined || $loginData[i] === null ){
+                        continue;
+					}
+					if($loginData[i].name === null || $loginData[i].name !== username)					{
+                        continue;
+					}
+					if($loginData[i].password === null || $loginData[i].password !== password ){
+                        continue;
+					}
+					window.location.href = "http://www.etc.unitbv.ro/elsa/admin.html";
+				}
+			}
+	});
+}
