@@ -6,6 +6,11 @@
 <script src="/elsa/theme/vendors/fastclick/lib/fastclick.js"></script>
 <!-- NProgress -->
 <script src="/elsa/theme/vendors/nprogress/nprogress.js"></script>
+
+<!--Morris charts -->
+ <script src="/elsa/theme/vendors/raphael/raphael.min.js"></script>
+ <script src="/elsa/theme/vendors/morris.js/morris.min.js"></script>
+ 
 <!-- Chart.js -->
 <script src="/elsa/theme/vendors/Chart.js/dist/Chart.min.js"></script>
 <!-- gauge.js -->
@@ -33,12 +38,12 @@
 <script src="/elsa/theme/js/moment/moment.min.js"></script>
 <script src="/elsa/theme/js/datepicker/daterangepicker.js"></script>
 
-<!-- Custom Theme Scripts -->
+<!-- Custom elsa/theme Scripts -->
 <script src="/elsa/theme/js/custom.min.js"></script>
 
 <!-- Google maps -->
 <!-- <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDKLcybJGMBzsIZXl7Ws3zkHUDREFLnA00&callback=initMap"></script> -->
-<script src="/elsa/elsa-gmaps.js"></script>
+<!-- <script src="elsa-gmaps.js"></script> -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXB10IWlROpBRBDH3hQuGNEbJiXCrHwGk"></script>
 <!--/Google maps -->
 
@@ -57,3 +62,35 @@
 <script src="/elsa/theme/vendors/datatables.net-scroller/js/dataTables.scroller.min.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.2/angular.js"></script>
 <script src="/elsa/app.js" type="text/javascript"></script>
+
+<!-- profile chart -->
+<script>
+      $(function() {
+        Morris.Bar({
+          element: 'graph_bar',
+          data: [
+            { "period": "Jan", "Hours worked": 80 }, 
+            { "period": "Feb", "Hours worked": 125 }, 
+            { "period": "Mar", "Hours worked": 176 }, 
+            { "period": "Apr", "Hours worked": 224 }, 
+            { "period": "May", "Hours worked": 265 }, 
+            { "period": "Jun", "Hours worked": 314 }, 
+            { "period": "Jul", "Hours worked": 347 }, 
+            { "period": "Aug", "Hours worked": 287 }, 
+            { "period": "Sep", "Hours worked": 240 }, 
+            { "period": "Oct", "Hours worked": 211 }
+          ],
+          xkey: 'period',
+          hideHover: 'auto',
+          barColors: ['#26B99A', '#34495E', '#ACADAC', '#3498DB'],
+          ykeys: ['Hours worked', 'sorned'],
+          labels: ['Hours worked', 'SORN'],
+          xLabelAngle: 60,
+          resize: true
+        });
+
+        $MENU_TOGGLE.on('click', function() {
+          $(window).resize();
+        });
+      });
+</script>

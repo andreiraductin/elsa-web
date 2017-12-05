@@ -7,3 +7,7 @@ html, body {
 	padding: 0;
 	overflow-y: auto;
 }
+.white-text{
+	color: white !important;
+    font-weight: 400 !important;
+}

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <% include head %>
+</head>
+<body class="nav-md">
+        <div class="container body" ng-app="testModule">
+        <div class="main_container">
+            <% include left_menu %>
+            <% include top_menu %>
+            <div class="right_col" role="main">
+                <%- body %>
+            </div>
+                <% include footer%>
+            </div>
+        </div>
+    <% include footer_scripts%>
+</body>
+</html>

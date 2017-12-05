@@ -1,79 +1,59 @@
+//seasdasdast up our application
 
-var express = require('express')
-var app = express()
-var router = express.Router();
-var pg = require('pg');
+var express  = require('express');
+var app      = express();
+var port     = 3000;
+var passport = require('passport');
+var flash    = require('connect-flash');
+
+var morgan       = require('morgan');
+var cookieParser = require('cookie-parser');
+var bodyParser   = require('body-parser');
+var session      = require('express-session');
+var pg           = require('pg');
+
 var path = require('path');
-var connectionString = process.env.DATABASE_URL || 'postgres://elsa:elsa@127.0.0.1:5432/elsadb';
-var bodyParser = require('body-parser');
 var engine = require('ejs-locals');
+var conString = "postgres://elsa:elsa@127.0.0.1:5432/elsadb";
+
+var client = new pg.Client(conString);
+client.connect(function(err) {
+    if(err) {
+        return console.error('could not connect to postgres', err);
+    }
+    client.query('SELECT NOW() AS "theTime"', function(err, result) {
+        if(err) {
+            return console.error('error running query', err);
+        }
+        console.log(result.rows[0].theTime);
+        //output: Tue Jan 15 2013 19:12:47 GMT-600 (CST)
+        //client.end();
+    });
+});
+
+require('./config/passport')(passport); // pass passport for configuration
+
+// set up our express application
+app.use(morgan('dev')); // log every request to the console
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(bodyParser()); // get information from html forms
+
+//app.use(express.static(__dirname + '/public'));
+app.use(express.static(path.join(__dirname, '/public')));
 
 app.engine('ejs', engine);
 app.set('views',__dirname + '/views');
-app.set('view engine', 'ejs');
+app.set('view engine', 'ejs'); // set up ejs for templating
 
+// required for passport
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secret
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+app.use(flash()); // use connect-flash for flash messages stored in session
 
-app.use(bodyParser());
+// routes ======================================================================
+require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
 
-app.use(express.static(__dirname + '/public'));
-
-// index page 
-app.get('/index', function(req, res) {
-    res.render('pages/index.ejs');
-});
-
-app.get('/', function (req, res) {
-	//res.redirect('admin.html');
-	res.render('pages/index.ejs');
- });
- 
-app.post('/api/v1/reports', (req, res) => {
-  const results = [];
-  // Grab data from http request
-//  console.log(req.body);
-  const data = req.body;
- // console.log(data);
- // Get a Postgres client from the connection pool
-  pg.connect(connectionString, (err, client, done) => {
-    // Handle connection errors
-    if(err) {
-      done();
-      console.log(err);
-      console.log("----------------------=====-------");
-      return res.status(500).json({success: false, test:abc, data: err});
-    }
-    // SQL Query > Insert Data
-    client.query('INSERT INTO elsadev(devid, timestamp, location, event) values($1, $2, $3, $4)',
-    [data.devid, data.timestamp, data.location, data.event]);
-    return res.json({"status":"success"});
-  });
-});
-
-
-app.get('/api/v1/reports', (req, res) => {
-  const results = [];
-  // Get a Postgres client from the connection pool
-  pg.connect(connectionString, (err, client, done) => {
-    // Handle connection errors
-    if(err) {
-      done();
-      console.log(err);
-      return res.status(500).json({success: false, data: err});
-    }
-    // SQL Query > Select Data
-    const query = client.query('SELECT * FROM elsadev ORDER BY id ASC;');
-    // Stream results back one row at a time
-    query.on('row', (row) => {
-      results.push(row);
-    });
-    // After all data is returned, close connection and return results
-    query.on('end', () => {
-      done();
-      return res.json(results);
-    });
-  });
-});
-
-app.listen(3000, function () {
-  console.log('Example app listening on port $$$$    3000!      $$$$$')
-});
+// launch ======================================================================
+app.listen(port);
+console.log('The magic happens on port ' + port);
